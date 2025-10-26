@@ -1,0 +1,6 @@
+@WorldOfTheVoid_HostAddress = http://localhost:5101
+
+GET {{WorldOfTheVoid_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
