@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WorldOfTheVoid.Features;
 
 namespace WorldOfTheVoid.Controllers;
 
@@ -6,11 +7,18 @@ namespace WorldOfTheVoid.Controllers;
 [Route("api/[controller]")]
 public class WorldController : ControllerBase
 {
+    private GetWorldStateHandler _getWorldStateHandler;
+
+    public WorldController(GetWorldStateHandler getWorldStateHandler)
+    {
+        _getWorldStateHandler = getWorldStateHandler;
+    }
+
     [HttpGet("state")]
     [ProducesResponseType<WorldDto>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetWorldState()
     {
-        // Implementation to retrieve and return the world state
-        return Ok();
+        var result = await _getWorldStateHandler.Handle(new GetWorldStateQuery());
+        return Ok(result);
     }
 }

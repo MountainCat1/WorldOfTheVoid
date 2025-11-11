@@ -11,7 +11,7 @@ public class GameDbContext : DbContext
         : base(options) { }
 
     public DbSet<Character> Characters { get; set; } = null!;
-    public DbSet<World?> Worlds { get; set; } = null!;
+    public DbSet<World> Worlds { get; set; } = null!;
     public DbSet<Place> Places { get; set; } = null!;
     
     

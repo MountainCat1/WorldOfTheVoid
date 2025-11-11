@@ -14,22 +14,26 @@ public static class HandlerRegistrationExtensions
             .Where(t => t is { IsAbstract: false, IsInterface: false })
             .ToList();
 
+        var handlerInterfaceTypes = new[]
+        {
+            typeof(IQueryHandler<,>),
+            typeof(ICommandHandler<,>)
+        };
+
         foreach (var type in types)
         {
             var interfaces = type.GetInterfaces()
-                .Where(i =>
-                    i.IsGenericType &&
-                    (
-                        i.GetGenericTypeDefinition().Name is nameof(IQueryHandler<,>) or nameof(ICommandHandler<,>)
-                        // if ICommandHandler only has 1 type argument, handle that too
-                        || (i.GetGenericTypeDefinition().Name == nameof(ICommandHandler<,>) && i.GetGenericArguments().Length == 1)
-                    ));
+                .Where(i => i.IsGenericType &&
+                            handlerInterfaceTypes.Contains(i.GetGenericTypeDefinition()));
 
-            foreach (var handlerInterface in interfaces)
-            {
-                services.AddTransient(handlerInterface, type);
-            }
+            if(interfaces.Any() == false)
+                continue;
+            
+            services.AddTransient(type, type);
+
+            Console.WriteLine($"Registered handler: {type.FullName}");
         }
+
 
         return services;
     }

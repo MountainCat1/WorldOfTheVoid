@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Text.Json.Serialization;
 
 namespace WorldOfTheVoid.Domain.Entities;
 
@@ -9,5 +10,6 @@ public class Character
     public Vector3 Position { get; set; }
 
     public Guid WorldId { get; set; }
+    [JsonIgnore]
     public virtual World World { get; set; }
 }

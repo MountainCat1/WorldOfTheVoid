@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using WorldOfTheVoid.Domain.Ports;
+using WorldOfTheVoid.Extensions;
 using WorldOfTheVoid.Infrastructure.DbContext;
+using WorldOfTheVoid.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,10 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContext<GameDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("GameDatabase")));
+
+builder.Services.AddScoped<IWorldRepository, WorldRepository>();
+
+builder.Services.AddHandlersFromAssemblyContaining<Program>();
 
 var app = builder.Build();
 
