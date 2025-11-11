@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Internal;
+using WorldOfTheVoid.Domain;
 using WorldOfTheVoid.Domain.Entities;
 using WorldOfTheVoid.Domain.Ports;
 using WorldOfTheVoid.Infrastructure.DbContext;
@@ -15,7 +16,7 @@ public class WorldRepository : IWorldRepository
         _dbContext = dbContext;
     }
 
-    public async Task<World?> GetWorldById(Guid id)
+    public async Task<World?> GetWorldById(EntityId id)
     {
         return await _dbContext.Worlds
             .Include(x => x.Characters)

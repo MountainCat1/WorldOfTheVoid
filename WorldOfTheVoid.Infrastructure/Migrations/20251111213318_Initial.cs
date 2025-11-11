@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -15,7 +14,7 @@ namespace WorldOfTheVoid.Infrastructure.Migrations
                 name: "Worlds",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false)
                 },
                 constraints: table =>
@@ -27,10 +26,10 @@ namespace WorldOfTheVoid.Infrastructure.Migrations
                 name: "Characters",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Position = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    WorldId = table.Column<Guid>(type: "uuid", nullable: false)
+                    WorldId = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,10 +46,10 @@ namespace WorldOfTheVoid.Infrastructure.Migrations
                 name: "Places",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Position = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    WorldId = table.Column<Guid>(type: "uuid", nullable: false)
+                    WorldId = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,7 +65,7 @@ namespace WorldOfTheVoid.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Worlds",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), "The Void" });
+                values: new object[] { "World_11111111-1111-1111-1111-111111111111", "The Void" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Characters_WorldId",

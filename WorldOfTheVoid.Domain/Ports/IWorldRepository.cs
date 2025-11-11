@@ -10,5 +10,5 @@ public interface IWorldRepository
         return await GetWorldById(WorldConsts.DefaultWorldId) ?? throw new NullReferenceException("Default world not found");
     }
     
-    public Task<World?> GetWorldById(Guid id);
+    public Task<World?> GetWorldById(EntityId id);
 }
