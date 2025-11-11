@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WorldOfTheVoid.Domain.Ports;
@@ -19,6 +20,10 @@ builder.Services.AddSwaggerGen(c =>
         Title = "World of the Void API",
         Version = "v1"
     });
+});
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new Vector3JsonConverter());
 });
 
 builder.Services.AddDbContext<GameDbContext>(options =>
