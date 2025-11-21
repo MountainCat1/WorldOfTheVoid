@@ -42,6 +42,7 @@ public class WorldDisplay : MonoBehaviour
             {
                 Debug.Log("Fetching world state...");
                 var worldDto = await worldClient.GetWorldStateAsync();
+                WorldState.State = worldDto;
 
                 if (worldDto != null)
                     OnWorldReceived(worldDto);

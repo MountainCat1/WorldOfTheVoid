@@ -1,4 +1,5 @@
 using WorldOfTheVoid.Domain.Entities;
+using WorldOfTheVoid.Domain.Entities.Orders;
 using WorldOfTheVoid.Infrastructure.DbConfiguration;
 
 namespace WorldOfTheVoid.Infrastructure.DbContext;
@@ -13,6 +14,8 @@ public class GameDbContext : DbContext
     public DbSet<Character> Characters { get; set; } = null!;
     public DbSet<World> Worlds { get; set; } = null!;
     public DbSet<Place> Places { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    
     
     public DbSet<Account> Accounts { get; set; } = null!;
     

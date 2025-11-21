@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Utilities
@@ -34,6 +35,12 @@ namespace Utilities
         public static object Deserialize(string json, Type type)
         {
             return JsonConvert.DeserializeObject(json, type, Settings);
+        }
+        
+        public static JToken DeserializeToJToken<T>(T o)
+        {
+            var json = Serialize(o);
+            return JToken.Parse(json);
         }
 
         private class Vector3Converter : JsonConverter<Vector3>

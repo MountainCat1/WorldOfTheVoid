@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Text.Json.Serialization;
+using WorldOfTheVoid.Domain.Entities.Orders;
 
 namespace WorldOfTheVoid.Domain.Entities;
 
@@ -16,6 +17,9 @@ public class Character
     public EntityId AccountId { get; set; }
     [JsonIgnore]
     public virtual Account Owner { get; set; }
+    
+    [JsonIgnore]
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 
     public static Character Create(Account account, string name)
     {
@@ -27,5 +31,12 @@ public class Character
             AccountId = account.Id,
             Owner = account,
         };
+    }
+    
+    public void AddOrder(Order order)
+    {
+        order.CharacterId = Id;
+        order.Character = this;
+        Orders.Add(order);
     }
 }

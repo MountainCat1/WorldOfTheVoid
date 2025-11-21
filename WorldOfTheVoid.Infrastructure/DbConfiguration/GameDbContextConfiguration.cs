@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WorldOfTheVoid.Domain;
 using WorldOfTheVoid.Domain.Consts;
 using WorldOfTheVoid.Domain.Entities;
+using WorldOfTheVoid.Domain.Entities.Orders;
 using WorldOfTheVoid.Infrastructure.Converters;
 
 namespace WorldOfTheVoid.Infrastructure.DbConfiguration;
@@ -114,6 +115,28 @@ public static class GameDbContextConfiguration
             .WithOne(p => p.World)
             .HasForeignKey(p => p.WorldId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        // === ORDER ===
+        var orderConfig = mb.Entity<Order>();
+        orderConfig.HasKey(o => o.Id);
+        orderConfig.Property(o => o.Id)
+            .HasConversion(idConverter)
+            .HasMaxLength(64)
+            .IsRequired()
+            .ValueGeneratedNever();
+        
+        orderConfig.Property(o => o.Type)
+            .IsRequired()
+            .HasMaxLength(128);
+        orderConfig.Property(o => o.Data)
+            .HasColumnType("jsonb")
+            .IsRequired();
+        orderConfig.Property(o => o.CharacterId)
+            .HasConversion(idConverter)
+            .HasMaxLength(64)
+            .IsRequired()
+            .ValueGeneratedNever();
+        
 
         // --- SEED DATA ---
         worldConfig.HasData(

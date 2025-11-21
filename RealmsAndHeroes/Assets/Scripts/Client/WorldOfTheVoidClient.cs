@@ -102,4 +102,29 @@ public class WorldOfTheVoidClient : MonoBehaviour
             return null;
         }
     }
+
+    public async Task<OrderDto> AddOrderToCharacterAsync(string ownCharacterId, AddOrderRequest request)
+    {
+        string url = $"{baseUrl}/api/characters/{ownCharacterId}/orders";
+
+        string json = JsonService.Serialize(request);
+
+        var webRequest = CreateRequest(url, UnityWebRequest.kHttpVerbPOST, json);
+        var result = await SendAsync(webRequest);
+
+        if (result == null) return null;
+        
+        try
+        {
+            var order = JsonService.Deserialize<OrderDto>(result.downloadHandler.text);
+            Debug.Log($"[WorldOfTheVoidClient] Order added: {order.Id} of type {order.Type}");
+            return order;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[WorldOfTheVoidClient] JSON parse error: {e.Message}");
+            return null;
+        }
+
+    }
 }

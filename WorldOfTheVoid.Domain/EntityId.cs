@@ -5,7 +5,8 @@ public enum EntityType
     Character,
     Place,
     World,
-    Account
+    Account,
+    Order
 }
 
 public readonly struct EntityId : IEquatable<EntityId>
