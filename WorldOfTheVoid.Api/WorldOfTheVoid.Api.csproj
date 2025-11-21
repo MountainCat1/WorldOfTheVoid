@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\WorldOfTheVoid.Auth\WorldOfTheVoid.Auth.csproj" />
       <ProjectReference Include="..\WorldOfTheVoid.Domain\WorldOfTheVoid.Domain.csproj" />
       <ProjectReference Include="..\WorldOfTheVoid.Infrastructure\WorldOfTheVoid.Infrastructure.csproj" />
     </ItemGroup>

@@ -14,6 +14,8 @@ public class GameDbContext : DbContext
     public DbSet<World> Worlds { get; set; } = null!;
     public DbSet<Place> Places { get; set; } = null!;
     
+    public DbSet<Account> Accounts { get; set; } = null!;
+    
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

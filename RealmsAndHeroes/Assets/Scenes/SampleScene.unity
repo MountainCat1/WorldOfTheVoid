@@ -244,7 +244,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldClient: {fileID: 1008791044}
   placeObjectPrefab: {fileID: 7104431612552329110, guid: fa6929336613dc74f9dc304829d642e2, type: 3}
+  characterObjectPrefab: {fileID: 3580701821644340274, guid: 007a4496fe37b7f4db2c50a551a2b36e, type: 3}
   containerParent: {fileID: 384316285}
+  username: string
+  password: string
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,6 @@ namespace WorldOfTheVoid.Features;
 
 public class GetWorldStateQuery : IQuery<WorldDto>
 {
-    
 }
 
 public class GetWorldStateHandler : IQueryHandler<GetWorldStateQuery, WorldDto>

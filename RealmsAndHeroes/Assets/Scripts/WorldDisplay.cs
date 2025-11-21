@@ -11,9 +11,13 @@ public class WorldDisplay : MonoBehaviour
     [SerializeField] private WorldOfTheVoidClient worldClient;
     
     [SerializeField] private PlaceObject placeObjectPrefab;
+    [SerializeField] private CharacterObject characterObjectPrefab;
     
     [SerializeField] private Transform containerParent;
 
+    [SerializeField] private string username = "admin";
+    [SerializeField] private string password = "admin";
+    
     private CancellationTokenSource _cts;
 
     private void OnEnable()
@@ -30,6 +34,8 @@ public class WorldDisplay : MonoBehaviour
 
     private async Task UpdateWorldLoopAsync(CancellationToken ct)
     {
+        await worldClient.Authenticate(username, password);
+        
         while (!ct.IsCancellationRequested)
         {
             try
@@ -71,6 +77,14 @@ public class WorldDisplay : MonoBehaviour
         {
             var placeObject = Instantiate(placeObjectPrefab, place.Position.ToUnityVector3(), Quaternion.identity, containerParent);
             placeObject.Initialize(place);
+        }
+
+        foreach (var character in world.Characters)
+        {
+            var characterObject = Instantiate(characterObjectPrefab, character.Position.ToUnityVector3(), Quaternion.identity, containerParent);
+            
+            var own = worldClient.User != null && character.AccountId == worldClient.User.Id;
+            characterObject.Initialize(character, own);
         }
     }
 }

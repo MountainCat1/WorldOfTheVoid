@@ -12,6 +12,28 @@ public static class GameDbContextConfiguration
     {
         var idConverter = new EntityIdConverter();
 
+        // === ACCOUNT ===
+        var accountConfig = mb.Entity<Account>();
+        accountConfig.HasKey(a => a.Id);
+        accountConfig.Property(a => a.Id)
+            .HasConversion(idConverter)
+            .HasMaxLength(64)
+            .IsRequired()
+            .ValueGeneratedNever();
+        accountConfig.Property(a => a.Username)
+            .IsRequired()
+            .HasMaxLength(64);
+        accountConfig.Property(a => a.Email)
+            .IsRequired()
+            .HasMaxLength(128);
+        accountConfig.Property(a => a.PasswordHash)
+            .IsRequired()
+            .HasMaxLength(256);
+        accountConfig.Property(a => a.PasswordSalt)
+            .IsRequired()
+            .HasMaxLength(256);
+        
+        
         // === CHARACTER ===
         var characterConfig = mb.Entity<Character>();
         characterConfig.HasKey(c => c.Id);
@@ -36,7 +58,12 @@ public static class GameDbContextConfiguration
             .HasMaxLength(64)
             .IsRequired()
             .ValueGeneratedNever();
-
+        
+        characterConfig.Property(c => c.AccountId)
+            .HasConversion(idConverter)
+            .HasMaxLength(64)
+            .IsRequired()
+            .ValueGeneratedNever();
 
         // === PLACE ===
         var placeConfig = mb.Entity<Place>();

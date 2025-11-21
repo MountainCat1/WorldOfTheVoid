@@ -16,11 +16,25 @@ public class WorldRepository : IWorldRepository
         _dbContext = dbContext;
     }
 
-    public async Task<World?> GetWorldById(EntityId id)
+    public async Task<World?> GetWorldById(EntityId id, bool asNoTracking = false)
     {
+        if (asNoTracking)
+        {
+            return await _dbContext.Worlds
+                .AsNoTracking()
+                .Include(x => x.Characters)
+                .Include(x => x.Places)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         return await _dbContext.Worlds
             .Include(x => x.Characters)
             .Include(x => x.Places)
-            .FirstAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public Task<int> SaveChangesAsync()
+    {
+        return _dbContext.SaveChangesAsync();
     }
 }

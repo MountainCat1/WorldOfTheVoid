@@ -10,5 +10,6 @@ namespace WorldOfTheVoid.Domain.Entities
         public Vector3 Position { get; set; }
 
         public string WorldId { get; set; }
+        public string AccountId { get; set; }
     }
 }

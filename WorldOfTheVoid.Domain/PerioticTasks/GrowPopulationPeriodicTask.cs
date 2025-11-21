@@ -1,7 +1,7 @@
 using WorldOfTheVoid.Domain.Ports;
 using WorldOfTheVoid.Interfaces;
 
-namespace WorldOfTheVoid.Features;
+namespace WorldOfTheVoid.Domain.PerioticTasks;
 
 public class GrowPopulationPeriodicTask : IPeriodicTask
 {
