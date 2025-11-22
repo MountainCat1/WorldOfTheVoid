@@ -34,7 +34,7 @@ public class CharacterController : ControllerBase
         
         var command = new CreateCharacterCommand
         {
-            AccountId = new EntityId(userContext.AccountId),
+            AccountId = userContext.AccountId,
             Name = request.Name
         };
         
@@ -51,7 +51,7 @@ public class CharacterController : ControllerBase
         
         var query = new GetCharactersQuery
         {
-            AccountId = new EntityId(userContext.AccountId)
+            AccountId = userContext.AccountId
         };
      
         var result = await _getCharactersHandler.Handle(query);

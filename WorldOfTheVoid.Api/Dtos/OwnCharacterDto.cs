@@ -1,19 +1,31 @@
+using System.Numerics;
 using System.Reflection;
+using System.Text.Json.Serialization;
+using WorldOfTheVoid.Domain;
 using WorldOfTheVoid.Domain.Entities;
+using WorldOfTheVoid.Domain.Entities.Orders;
 
 namespace WorldOfTheVoid.Dtos;
 
-public class WorldDto : World
+public class OwnCharacterDto
 {
-    public ICollection<OwnCharacterDto> OwnCharacters { get; private set; } = new List<OwnCharacterDto>();
-    public static WorldDto Create(World? world, ICollection<OwnCharacterDto> ownCharacters)
+    public EntityId Id { get; set; }
+    public string Name { get; set; }
+    public Vector3 Position { get; set; }
+
+    public EntityId WorldId { get; set; }
+    public EntityId AccountId { get; set; }
+    
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    public static OwnCharacterDto Create(Character? world)
     {
         if (world == null)
             throw new ArgumentNullException(nameof(world));
 
-        var dto = new WorldDto();
-        var sourceType = typeof(World);
-        var targetType = typeof(WorldDto);
+        var dto = new OwnCharacterDto();
+        var sourceType = typeof(Character);
+        var targetType = typeof(OwnCharacterDto);
 
         foreach (var prop in sourceType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
@@ -27,9 +39,8 @@ public class WorldDto : World
             var value = prop.GetValue(world);
             targetProp.SetValue(dto, value);
         }
-        
-        dto.OwnCharacters = ownCharacters;
 
         return dto;
     }
+    
 }

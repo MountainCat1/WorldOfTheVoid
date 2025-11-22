@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WorldOfTheVoid.Domain;
 using WorldOfTheVoid.Domain.Entities;
 using WorldOfTheVoid.Domain.Entities.Orders;
@@ -30,5 +31,14 @@ public class CharacterRepository : ICharacterRepository
         var orders = _dbContext.Orders.Where(o => o.CharacterId == character.Id);
         _dbContext.Orders.RemoveRange(orders);
         await Task.CompletedTask;
+    }
+
+    public Task<ICollection<Character>> GetByIds(List<EntityId> toList)
+    {
+        var characters = _dbContext.Characters
+            .Where(c => toList.Contains(c.Id))
+            .Include(c => c.Orders)
+            .ToList();
+        return Task.FromResult((ICollection<Character>)characters);
     }
 }

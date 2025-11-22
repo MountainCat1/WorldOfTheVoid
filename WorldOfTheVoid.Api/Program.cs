@@ -55,15 +55,16 @@ builder.Services.Configure<JsonOptions>(options =>
 
 var gameConnectionString = builder.Configuration.GetConnectionString("GameDatabase");
 
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(gameConnectionString);
+dataSourceBuilder.EnableDynamicJson();
+var dataSource = dataSourceBuilder.Build();
+
+builder.Services.AddSingleton(dataSource);
+
 builder.Services.AddDbContext<GameDbContext>((sp, dbOptions) =>
 {
-    var dataSourceBuilder = new NpgsqlDataSourceBuilder(gameConnectionString);
-
-    dataSourceBuilder.EnableDynamicJson(); 
-
-    var dataSource = dataSourceBuilder.Build();
-
-    dbOptions.UseNpgsql(dataSource);
+    var ds = sp.GetRequiredService<NpgsqlDataSource>();
+    dbOptions.UseNpgsql(ds);
 });
 
 builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
@@ -80,14 +81,12 @@ builder.Services.AddScoped<IWorldRepository, WorldRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 
-
 // Application
 builder.Services.AddHandlersFromAssemblyContaining<Program>();
 
 builder.Services.AddScoped<IPeriodicTask, GrowPopulationPeriodicTask>();
 builder.Services.AddScoped<IPeriodicTask, ExecuteOrdersTask>();
 builder.Services.AddHostedService<PeriodicWorker>();
-
 
 var app = builder.Build();
 

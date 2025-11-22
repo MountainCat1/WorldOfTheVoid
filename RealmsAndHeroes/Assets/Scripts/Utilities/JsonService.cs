@@ -13,10 +13,11 @@ namespace Utilities
         {
             Settings = new JsonSerializerSettings
             {
-                Formatting = Formatting.None,
+                Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Include
+                DefaultValueHandling = DefaultValueHandling.Include,
+                
             };
 
             Settings.Converters.Add(new Vector3Converter());

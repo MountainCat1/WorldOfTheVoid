@@ -11,13 +11,15 @@ namespace WorldOfTheVoid.Controllers;
 [Route("api/characters/{characterId}/orders")]
 public class OrderController : ControllerBase
 {
-    private AddOrderHandler _addOrderHandler;
-    private ReplaceOrdersHandler _replaceOrdersHandler;
+    private readonly AddOrderHandler _addOrderHandler;
+    private readonly ReplaceOrdersHandler _replaceOrdersHandler;
+    private readonly GetCharacterOrdersHandler _getCharacterOrdersHandler;
 
-    public OrderController(AddOrderHandler addOrderHandler, ReplaceOrdersHandler replaceOrdersHandler)
+    public OrderController(AddOrderHandler addOrderHandler, ReplaceOrdersHandler replaceOrdersHandler, GetCharacterOrdersHandler getCharacterOrdersHandler)
     {
         _addOrderHandler = addOrderHandler;
         _replaceOrdersHandler = replaceOrdersHandler;
+        _getCharacterOrdersHandler = getCharacterOrdersHandler;
     }
 
 
@@ -52,6 +54,19 @@ public class OrderController : ControllerBase
         };
 
         var result = await _replaceOrdersHandler.Handle(command);
+
+        return Ok(result);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetOrders([FromRoute] EntityId characterId)
+    {
+        var query = new GetCharacterOrdersQuery
+        {
+            CharacterId = characterId
+        };
+
+        var result = await _getCharacterOrdersHandler.Handle(query);
 
         return Ok(result);
     }

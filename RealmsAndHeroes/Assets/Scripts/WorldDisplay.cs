@@ -10,61 +10,19 @@ using WorldOfTheVoid.Domain.Entities;
 
 public class WorldDisplay : MonoBehaviour
 {
+    [SerializeField] private WorldReceiver worldReceiver;
     [SerializeField] private WorldOfTheVoidClient worldClient;
-    
+
     [SerializeField] private PlaceObject placeObjectPrefab;
     [SerializeField] private CharacterObject characterObjectPrefab;
     
     [SerializeField] private Transform containerParent;
     private Dictionary<string, GameObject> _instantiatedObjects = new();
 
-    [SerializeField] private string username = "admin";
-    [SerializeField] private string password = "admin";
-    
-    private CancellationTokenSource _cts;
 
-    private void OnEnable()
+    private void Start()
     {
-        _cts = new CancellationTokenSource();
-        _ = UpdateWorldLoopAsync(_cts.Token);
-    }
-
-    private void OnDisable()
-    {
-        _cts.Cancel();
-        _cts.Dispose();
-    }
-
-    private async Task UpdateWorldLoopAsync(CancellationToken ct)
-    {
-        await worldClient.Authenticate(username, password);
-        
-        while (!ct.IsCancellationRequested)
-        {
-            try
-            {
-                Debug.Log("Fetching world state...");
-                var worldDto = await worldClient.GetWorldStateAsync();
-                WorldState.State = worldDto;
-
-                if (worldDto != null)
-                    OnWorldReceived(worldDto);
-                else
-                    Debug.LogWarning("Received null world state.");
-
-                await Task.Delay(3000, ct); // wait 3 seconds
-            }
-            catch (TaskCanceledException)
-            {
-                // graceful exit
-                break;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Error fetching world state: {ex.Message}");
-                await Task.Delay(3000, ct);
-            }
-        }
+        worldReceiver.OnWorldReceived += OnWorldReceived;
     }
 
     private void OnWorldReceived(WorldDto world)
@@ -101,7 +59,6 @@ public class WorldDisplay : MonoBehaviour
                 characterObjectGo = Instantiate(characterObjectPrefab,  containerParent).gameObject;
                 _instantiatedObjects.Add(character.Id, characterObjectGo);
             }
-            
             
             var own = worldClient.User != null && character.AccountId == worldClient.User.Id;
             

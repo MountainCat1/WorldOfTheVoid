@@ -35,9 +35,7 @@ public class Commander : MonoBehaviour
 
         var world = WorldState.State;
 
-        var ownCharacters = world
-            .Characters
-            .Where(c => c.AccountId == worldClient.User.Id);
+        var ownCharacters = world.OwnCharacters;
 
 
         foreach (var ownCharacter in ownCharacters)

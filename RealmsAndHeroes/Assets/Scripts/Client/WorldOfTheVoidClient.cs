@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client;
 using UnityEngine;
@@ -125,6 +126,25 @@ public class WorldOfTheVoidClient : MonoBehaviour
             Debug.LogError($"[WorldOfTheVoidClient] JSON parse error: {e.Message}");
             return null;
         }
+    }
+    
+    public async Task<ICollection<OrderDto>> GetAllCharacterOrdersAsync(string characterId)
+    {
+        string url = $"{baseUrl}/api/characters/{characterId}/orders";
 
+        var request = CreateRequest(url, UnityWebRequest.kHttpVerbGET);
+        var result = await SendAsync(request);
+
+        if (result == null) return null;
+
+        try
+        {
+            return JsonService.Deserialize<ICollection<OrderDto>>(result.downloadHandler.text);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[WorldOfTheVoidClient] JSON parse error: {e.Message}");
+            return null;
+        }
     }
 }

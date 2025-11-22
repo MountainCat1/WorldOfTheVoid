@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace WorldOfTheVoid.Domain.Entities
@@ -9,6 +10,7 @@ namespace WorldOfTheVoid.Domain.Entities
         public string Name { get; set; }
     
         public virtual ICollection<CharacterDto> Characters { get; set; }
+        public virtual ICollection<OwnCharacterDto> OwnCharacters { get; set; }
         public virtual ICollection<PlaceDto> Places { get; set; }
         
         public ICollection<string> GetAllEntitiesIds()

@@ -1,10 +1,12 @@
 using WorldOfTheVoid.Auth.Consts;
+using WorldOfTheVoid.Domain;
+using WorldOfTheVoid.Extensions;
 
 namespace WorldOfTheVoid.Services;
 
 public record UserContext
 {
-    public required string AccountId { get; init; }
+    public required EntityId AccountId { get; init; }
     public required string Username { get; init; }
 }
 
@@ -26,19 +28,7 @@ public sealed class UserContextService : IUserContextService
     
     public UserContext GetUserContext()
     {
-        var userId = _accessor.HttpContext?.User.FindFirst(AccountClaims.AccountId)?.Value;
-        var username = _accessor.HttpContext?.User.FindFirst(AccountClaims.Username)?.Value;
-
-        if (userId == null || username == null)
-        {
-            throw new InvalidOperationException("User is not authenticated.");
-        }
-
-        return new UserContext
-        {
-            AccountId = userId,
-            Username = username
-        };
+        return _accessor.HttpContext?.User?.GetUserContext() ;
     }
 
     public string? UserId =>
