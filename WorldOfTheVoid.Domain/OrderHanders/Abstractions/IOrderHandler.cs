@@ -7,5 +7,13 @@ namespace WorldOfTheVoid.Domain.OrderHanders.Abstractions;
 public interface IOrderHandler
 {
     public OrderType OrderName { get; }
-    public Task ExecuteAsync(Character character, JsonNode data);
+    public Task<OrderHandleResult> ExecuteAsync(Character character, JsonNode data);
+}
+
+public record OrderHandleResult
+{
+    public bool Continues { get; set; }
+    public static OrderHandleResult Completed => new OrderHandleResult { Continues = false };
+
+    public static OrderHandleResult InProgress => new OrderHandleResult { Continues = true };
 }

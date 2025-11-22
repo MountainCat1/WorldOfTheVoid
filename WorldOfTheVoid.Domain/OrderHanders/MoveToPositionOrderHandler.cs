@@ -18,16 +18,23 @@ public class MoveToPositionOrderHandler : IOrderHandler
         _jsonOptions = jsonOptions;
     }
 
-    public async Task ExecuteAsync(Character character, JsonNode data)
+    public async Task<OrderHandleResult> ExecuteAsync(Character character, JsonNode data)
     {
         const float speed = 1;
 
         var targetPosition = data["TargetPosition"]!.Deserialize<Vector3>(_jsonOptions);
         
+        var distance = Vector3.Distance(character.Position, targetPosition);
+        if (distance <= speed)
+        {
+            character.Position = targetPosition;
+            return OrderHandleResult.Completed;
+        }
+        
         var direction = Vector3.Normalize(targetPosition - character.Position);
         
         character.Position += direction * speed;
         
-        await Task.CompletedTask;
+        return OrderHandleResult.InProgress;
     }
 }

@@ -78,6 +78,8 @@ builder.Services.AddScoped<IOrderHandler, MoveToPositionOrderHandler>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IWorldRepository, WorldRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
+
 
 // Application
 builder.Services.AddHandlersFromAssemblyContaining<Program>();

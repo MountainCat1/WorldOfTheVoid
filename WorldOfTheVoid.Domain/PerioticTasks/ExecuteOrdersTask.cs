@@ -52,21 +52,34 @@ public class ExecuteOrdersTask : IPeriodicTask
                     _logger.LogWarning("No handler found for order {OrderName}.", order.Type);
                     continue;
                 }
-                
+
                 try
                 {
-                    await handler.ExecuteAsync(character, order.Data);
-                    
-                    _logger.LogInformation("Executed order {OrderName} for character {CharacterId}.", order.Type, characterId);
+                    var result = await handler.ExecuteAsync(character, order.Data);
+
+                    if (!result.Continues)
+                    {
+                        _orderRepository.Remove(order);
+                    }
+
+                    _logger.LogInformation(
+                        "Executed order {OrderName} for character {CharacterId}.",
+                        order.Type,
+                        characterId
+                    );
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error executing order {OrderName} for character {CharacterId}.", order.Type, characterId);
+                    _logger.LogError(
+                        ex,
+                        "Error executing order {OrderName} for character {CharacterId}.",
+                        order.Type,
+                        characterId
+                    );
                 }
                 
-                _orderRepository.Remove(order);
+                break; // We process only one order per character per execution cycle
             }
-            
         }
     }
 }

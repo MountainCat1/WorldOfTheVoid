@@ -7,3 +7,4 @@ public interface IPeriodicTask
     /// </summary>
     Task ExecuteAsync(CancellationToken cancellationToken);
 }
+

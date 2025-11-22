@@ -13,7 +13,7 @@ namespace DefaultNamespace
         {
             nameDisplay.text = $"{place.Name} ({place.Population})";
 
-            transform.position = place.Position.ToUnityVector3();
+            GetComponent<InterpolatedTransform>().TargetPosition = place.Position.ToUnityVector3();
         }
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DefaultNamespace;
@@ -14,6 +16,7 @@ public class WorldDisplay : MonoBehaviour
     [SerializeField] private CharacterObject characterObjectPrefab;
     
     [SerializeField] private Transform containerParent;
+    private Dictionary<string, GameObject> _instantiatedObjects = new();
 
     [SerializeField] private string username = "admin";
     [SerializeField] private string password = "admin";
@@ -68,24 +71,41 @@ public class WorldDisplay : MonoBehaviour
     {
         Debug.Log($"World received: {world.Name} with {world.Places.Count} places.");
         
+        var allEntitiesIds = world.GetAllEntitiesIds();
+        
         // Clear existing place objects
-        foreach (Transform child in containerParent)
+        foreach (var (entityId, go) in _instantiatedObjects.ToList())
         {
-            Destroy(child.gameObject);
+            var existsInWorld = allEntitiesIds.Contains(entityId);
+            if (existsInWorld) continue;
+            
+            Debug.Log($"Removing object with EntityId: {entityId}");
+            Destroy(go);
         }
 
         foreach (var place in world.Places)
         {
-            var placeObject = Instantiate(placeObjectPrefab, place.Position.ToUnityVector3(), Quaternion.identity, containerParent);
-            placeObject.Initialize(place);
+            if (!_instantiatedObjects.TryGetValue(place.Id, out var placeObjectGo))
+            {
+                placeObjectGo = Instantiate(placeObjectPrefab, containerParent).gameObject;
+             _instantiatedObjects.Add(place.Id, placeObjectGo);
+            }
+            
+            placeObjectGo.GetComponent<PlaceObject>().Initialize(place);
         }
 
         foreach (var character in world.Characters)
         {
-            var characterObject = Instantiate(characterObjectPrefab, character.Position.ToUnityVector3(), Quaternion.identity, containerParent);
+            if (!_instantiatedObjects.TryGetValue(character.Id, out var characterObjectGo))
+            {
+                characterObjectGo = Instantiate(characterObjectPrefab,  containerParent).gameObject;
+                _instantiatedObjects.Add(character.Id, characterObjectGo);
+            }
+            
             
             var own = worldClient.User != null && character.AccountId == worldClient.User.Id;
-            characterObject.Initialize(character, own);
+            
+            characterObjectGo.GetComponent<CharacterObject>().Initialize(character, own);
         }
     }
 }

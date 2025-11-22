@@ -14,7 +14,7 @@ namespace DefaultNamespace
             nameDisplay.text = $"{character.Name}";
             nameDisplay.color = own ? Color.green : Color.white;
 
-            transform.position = character.Position.ToUnityVector3();
+            GetComponent<InterpolatedTransform>().TargetPosition = character.Position.ToUnityVector3();
         }
     }
 }

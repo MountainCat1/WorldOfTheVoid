@@ -37,7 +37,7 @@ namespace Utilities
             return JsonConvert.DeserializeObject(json, type, Settings);
         }
         
-        public static JToken DeserializeToJToken<T>(T o)
+        public static JToken SerializeToJToken<T>(T o)
         {
             var json = Serialize(o);
             return JToken.Parse(json);

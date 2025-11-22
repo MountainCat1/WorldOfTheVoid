@@ -21,12 +21,14 @@ public class Commander : MonoBehaviour
 
     private void IssueMoveCommand(Vector3 mouseWorldPosition)
     {
+        var flattenedPosition = new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, 0);
+        
         var request = new AddOrderRequest()
         {
             Type = OrderType.MoveToPosition,
             Data = new()
             {
-                { "TargetPosition", JsonService.DeserializeToJToken(mouseWorldPosition) }
+                { "TargetPosition", flattenedPosition.ToBackendString()}
             }
 
         };

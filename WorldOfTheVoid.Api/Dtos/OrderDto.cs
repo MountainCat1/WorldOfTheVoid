@@ -7,7 +7,7 @@ namespace WorldOfTheVoid.Dtos;
 public class OrderDto
 {
     public required EntityId Id { get; init; }
-    public required string Type { get; init; }
+    public required OrderType Type { get; init; }
     public required JsonObject Data { get; init; }
     
     
@@ -16,7 +16,7 @@ public class OrderDto
         return new OrderDto
         {
             Id = order.Id,
-            Type = order.Type.ToString(),
+            Type = order.Type,
             Data = order.Data,
         };
     }
