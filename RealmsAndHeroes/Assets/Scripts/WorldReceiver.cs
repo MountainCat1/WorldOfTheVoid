@@ -1,12 +1,8 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DefaultNamespace;
-using DefaultNamespace.Utilities;
-using UnityEngine;
 using WorldOfTheVoid.Domain.Entities;
 
 public class WorldReceiver : MonoBehaviour
