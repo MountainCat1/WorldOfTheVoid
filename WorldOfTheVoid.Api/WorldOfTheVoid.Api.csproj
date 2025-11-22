@@ -23,4 +23,8 @@
       <ProjectReference Include="..\WorldOfTheVoid.Infrastructure\WorldOfTheVoid.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Models\" />
+    </ItemGroup>
+
 </Project>

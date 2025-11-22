@@ -4,6 +4,7 @@ using WorldOfTheVoid.Domain.Consts;
 using WorldOfTheVoid.Domain.Entities;
 using WorldOfTheVoid.Domain.Entities.Orders;
 using WorldOfTheVoid.Infrastructure.Converters;
+using WorldOfTheVoid.Infrastructure.DbEntities;
 
 namespace WorldOfTheVoid.Infrastructure.DbConfiguration;
 
@@ -136,6 +137,11 @@ public static class GameDbContextConfiguration
             .HasMaxLength(64)
             .IsRequired()
             .ValueGeneratedNever();
+        
+        // === PeriodicWorkerLogs ===
+        var workerLogConfig = mb.Entity<PeriodicWorkerLog>();
+        workerLogConfig.HasKey(wl => wl.Id);
+        workerLogConfig.Property(wl => wl.Id).ValueGeneratedOnAdd();
         
 
         // --- SEED DATA ---

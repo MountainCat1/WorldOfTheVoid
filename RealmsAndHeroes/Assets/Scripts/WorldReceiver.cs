@@ -18,6 +18,8 @@ public class WorldReceiver : MonoBehaviour
     [SerializeField] private string username = "admin";
     [SerializeField] private string password = "admin";
     
+    [SerializeField] private float updateIntervalSeconds = 3f;
+    
     private CancellationTokenSource _cts;
     
     private void OnEnable()
@@ -40,6 +42,13 @@ public class WorldReceiver : MonoBehaviour
         {
             try
             {
+                if(worldClient.User == null)
+                {
+                    Debug.Log("Not authenticated. Attempting to authenticate...");
+                    await worldClient.Authenticate(username, password);
+                    continue;
+                }
+                
                 Debug.Log("Fetching world state...");
                 var worldDto = await worldClient.GetWorldStateAsync();
                 WorldState.State = worldDto;
@@ -49,7 +58,7 @@ public class WorldReceiver : MonoBehaviour
                 else
                     Debug.LogWarning("Received null world state.");
 
-                await Task.Delay(3000, ct); // wait 3 seconds
+                await Task.Delay(Mathf.RoundToInt(updateIntervalSeconds * 1000), ct); // wait 3 seconds
             }
             catch (TaskCanceledException)
             {
@@ -59,7 +68,7 @@ public class WorldReceiver : MonoBehaviour
             catch (Exception ex)
             {
                 Debug.LogException(ex);
-                await Task.Delay(3000, ct);
+                await Task.Delay(Mathf.RoundToInt(updateIntervalSeconds * 1000), ct);
             }
         }
     }

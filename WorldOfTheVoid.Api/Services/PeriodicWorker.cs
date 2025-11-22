@@ -2,9 +2,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using WorldOfTheVoid.Infrastructure.DbContext;
+using WorldOfTheVoid.Infrastructure.DbEntities;
 using WorldOfTheVoid.Interfaces;
 
 public class PeriodicWorker : BackgroundService
@@ -25,6 +27,9 @@ public class PeriodicWorker : BackgroundService
 
         while (!ct.IsCancellationRequested)
         {
+            var stopwatch = Stopwatch.StartNew();
+            var startTime = DateTimeOffset.UtcNow;
+            
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<GameDbContext>();
             var periodicTasks = scope.ServiceProvider.GetServices<IPeriodicTask>();
@@ -51,7 +56,19 @@ public class PeriodicWorker : BackgroundService
             {
                 _logger.LogError(ex, "Error in PeriodicWorker execution loop.");
             }
+            
+            stopwatch.Stop();
+            var elapsed = stopwatch.Elapsed;
 
+            var log = new PeriodicWorkerLog()
+            {
+                DateStarted = startTime,
+                Time = elapsed.Milliseconds / 1000f
+            };
+            
+            dbContext.PeriodicWorkerLogs.Add(log);
+            await dbContext.SaveChangesAsync(ct);
+            
             await Task.Delay(_interval, ct);
         }
 
